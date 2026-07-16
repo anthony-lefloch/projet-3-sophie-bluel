@@ -4,9 +4,53 @@ console.log("Le fichier JavaScript est bien connecté");
 // Sélectionne la galerie dans le HTML
 const gallery = document.querySelector(".gallery");
 
+// Sélectionne la zone où seront affichés les filtres
+const filters = document.querySelector(".filters");
+
+// Vérifie que la zone des filtres est bien récupérée
+console.log(filters);
+
 // Vérifie que la galerie est bien récupérée
 console.log(gallery);
 
+// Crée le bouton "Tous"
+const allButton = document.createElement("button");
+
+// Ajoute le texte du bouton
+allButton.innerText = "Tous";
+
+// Ajoute les classes CSS au bouton "Tous"
+allButton.classList.add("filter-button", "active");
+
+// Ajoute le bouton dans la zone des filtres
+filters.appendChild(allButton);
+
+// Appel à l'API pour récupérer les catégories
+fetch("http://localhost:5678/api/categories")
+  .then(function (response) {
+    // Transforme la réponse en données JavaScript
+    return response.json();
+  })
+  .then(function (categories) {
+    // Affiche les catégories dans la console
+    console.log(categories);
+
+    // Pour chaque catégorie récupérée depuis l'API
+    categories.forEach(function (category) {
+      // Crée un bouton
+      const categoryButton = document.createElement("button");
+
+      // Ajoute le nom de la catégorie dans le bouton
+      categoryButton.innerText = category.name;
+
+      // Ajoute une classe CSS au bouton
+      categoryButton.classList.add("filter-button");
+
+      // Ajoute le bouton dans la zone des filtres
+      filters.appendChild(categoryButton);
+    });
+  });
+  
 // Fonction qui crée un élément HTML pour afficher un projet
 function createWorkElement(work) {
     // Crée une balise <figure>
