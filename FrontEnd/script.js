@@ -7,6 +7,23 @@ const gallery = document.querySelector(".gallery");
 // Sélectionne la zone où seront affichés les filtres
 const filters = document.querySelector(".filters");
 
+// Stocke tous les travaux récupérés depuis l'API
+let allWorks = [];
+
+// Met à jour le bouton actif
+function updateActiveButton(clickedButton) {
+  // Sélectionne tous les boutons de filtre
+  const filterButtons = document.querySelectorAll(".filter-button");
+
+  // Retire la classe active de tous les boutons
+  filterButtons.forEach(function (button) {
+    button.classList.remove("active");
+  });
+
+  // Ajoute la classe active au bouton cliqué
+  clickedButton.classList.add("active");
+}
+
 // Vérifie que la zone des filtres est bien récupérée
 console.log(filters);
 
@@ -24,6 +41,12 @@ allButton.classList.add("filter-button", "active");
 
 // Ajoute le bouton dans la zone des filtres
 filters.appendChild(allButton);
+
+// Au clic sur "Tous", affiche tous les projets
+allButton.addEventListener("click", function () {
+  updateActiveButton(allButton);
+  displayWorks(allWorks);
+});
 
 // Appel à l'API pour récupérer les catégories
 fetch("http://localhost:5678/api/categories")
@@ -48,9 +71,20 @@ fetch("http://localhost:5678/api/categories")
 
       // Ajoute le bouton dans la zone des filtres
       filters.appendChild(categoryButton);
+
+      // Au clic sur une catégorie, affiche seulement les projets de cette catégorie
+      categoryButton.addEventListener("click", function () {
+        updateActiveButton(categoryButton);
+
+        const filteredWorks = allWorks.filter(function (work) {
+          return work.categoryId === category.id;
+        });
+
+        displayWorks(filteredWorks);
+      });
     });
   });
-  
+
 // Fonction qui crée un élément HTML pour afficher un projet
 function createWorkElement(work) {
     // Crée une balise <figure>
@@ -81,6 +115,21 @@ function createWorkElement(work) {
     return figure;
 }
 
+// Fonction qui affiche une liste de projets dans la galerie
+function displayWorks(works) {
+    // Vide la galerie avant d'afficher les projets
+    gallery.innerHTML = "";
+
+    // Pour chaque projet récupéré
+    works.forEach(function (work) {
+        // Crée un élément HTML pour le projet
+        const workElement = createWorkElement(work);
+
+        // Ajoute ce projet dans la galerie
+        gallery.appendChild(workElement);
+    });
+}
+
 // Appel à l'API pour récupérer les travaux de Sophie Bluel
 fetch("http://localhost:5678/api/works")
   .then(function (response) {
@@ -88,18 +137,12 @@ fetch("http://localhost:5678/api/works")
     return response.json();
   })
   .then(function (works) {
+    // Stocke tous les travaux dans la variable allWorks
+    allWorks = works;
+
     // Affiche tous les travaux récupérés dans la console
-    console.log(works);
+    console.log(allWorks);
 
-    // Vide la galerie avant d'ajouter les projets dynamiquement
-    gallery.innerHTML = "";
-
-    // Pour chaque projet récupéré depuis l'API
-    works.forEach(function (work) {
-      // Crée un élément HTML pour le projet
-      const workElement = createWorkElement(work);
-
-      // Ajoute ce projet dans la galerie
-      gallery.appendChild(workElement);
-    });
+    // Affiche les projets dans la galerie
+    displayWorks(allWorks);
   });
