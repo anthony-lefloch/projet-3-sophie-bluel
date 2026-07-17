@@ -98,6 +98,16 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+
+.nav-active {
+	font-weight: 700;
+	color: black;
+}
+
+.nav-active:hover {
+	color: black;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -139,7 +149,7 @@ li:hover {
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -208,4 +218,58 @@ footer nav ul {
 .filter-button.active {
 	color: white;
 	background-color: #1D6154;
+}
+
+/* Page login */
+
+#login {
+	width: 50%;
+	margin: 150px auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#login h2 {
+	margin-bottom: 30px;
+}
+
+#login form {
+	display: flex;
+	flex-direction: column;
+	width: 379px;
+}
+
+#login label {
+	margin: 2em 0 1em 0;
+}
+
+#login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#login input[type="submit"] {
+	font-family: "Syne", sans-serif;
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin: 2em auto;
+	width: 180px;
+	height: 36px;
+	text-align: center;
+	border-radius: 60px;
+	cursor: pointer;
+}
+
+#login a {
+	color: black;
+	text-decoration: underline;
+}
+
+nav a {
+	color: black;
+	text-decoration: none;
 }
