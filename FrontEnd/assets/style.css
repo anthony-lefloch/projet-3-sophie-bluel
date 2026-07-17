@@ -269,6 +269,11 @@ footer nav ul {
 	text-decoration: underline;
 }
 
+#login-error {
+	margin-top: 10px;
+	color: #B1663C;
+}
+
 nav a {
 	color: black;
 	text-decoration: none;
