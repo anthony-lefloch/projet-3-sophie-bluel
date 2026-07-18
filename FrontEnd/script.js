@@ -1,11 +1,53 @@
 // Vérifie que le fichier JavaScript est bien relié au fichier HTML
 console.log("Le fichier JavaScript est bien connecté");
 
+// Récupère le token enregistré lors de la connexion
+const token = localStorage.getItem("token");
+
+// Sélectionne le lien login dans le menu
+const loginLink = document.querySelector("#login-link");
+
 // Sélectionne la galerie dans le HTML
 const gallery = document.querySelector(".gallery");
 
 // Sélectionne la zone où seront affichés les filtres
 const filters = document.querySelector(".filters");
+
+// Sélectionne le bandeau du mode édition
+const editBanner = document.querySelector(".edit-banner");
+
+// Sélectionne le bouton modifier
+const editButton = document.querySelector(".edit-button");
+
+// Vérifie si l'utilisateur est connecté
+if (token) {
+  // Remplace login par logout
+  loginLink.innerText = "logout";
+
+  // Affiche le bandeau du mode édition
+  editBanner.style.display = "block";
+
+  // Cache les filtres
+  filters.style.display = "none";
+
+  // Affiche le bouton modifier
+  editButton.style.display = "block";
+
+  console.log("Utilisateur connecté");
+
+  // Déconnecte l'utilisateur au clic
+  loginLink.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    // Supprime le token
+    localStorage.removeItem("token");
+
+    // Recharge la page d'accueil
+    window.location.href = "./index.html";
+  });
+} else {
+  console.log("Utilisateur non connecté");
+}
 
 // Stocke tous les travaux récupérés depuis l'API
 let allWorks = [];

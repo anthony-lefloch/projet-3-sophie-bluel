@@ -278,3 +278,32 @@ nav a {
 	color: black;
 	text-decoration: none;
 }
+
+.edit-banner {
+	display: none;
+	background-color: black;
+	color: white;
+	text-align: center;
+	padding: 15px;
+}
+
+.portfolio-title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 30px;
+	margin-bottom: 1em;
+}
+
+.portfolio-title h2 {
+	margin-bottom: 0;
+}
+
+.edit-button {
+	display: none;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-family: "Work Sans", sans-serif;
+	font-size: 14px;
+}
