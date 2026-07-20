@@ -19,6 +19,27 @@ const editBanner = document.querySelector(".edit-banner");
 // Sélectionne le bouton modifier
 const editButton = document.querySelector(".edit-button");
 
+// Sélectionne la modale dans le HTML
+const modal = document.querySelector(".modal");
+
+// Sélectionne le bouton qui ferme la modale
+const modalClose = document.querySelector(".modal-close");
+
+// Sélectionne la vue galerie de la modale
+const modalGalleryView = document.querySelector(".modal-gallery-view");
+
+// Sélectionne la galerie située dans la modale
+const modalGallery = document.querySelector(".modal-gallery");
+
+// Sélectionne la vue formulaire de la modale
+const modalFormView = document.querySelector(".modal-form-view");
+
+// Sélectionne le bouton Ajouter une photo
+const addPhotoButton = document.querySelector(".add-photo-button");
+
+// Sélectionne la flèche de retour de la modale
+const modalBack = document.querySelector(".modal-back");
+
 // Vérifie si l'utilisateur est connecté
 if (token) {
   // Remplace login par logout
@@ -32,6 +53,18 @@ if (token) {
 
   // Affiche le bouton modifier
   editButton.style.display = "block";
+
+  // Ouvre la modale au clic sur le bouton Modifier
+  editButton.addEventListener("click", function () {
+    // Affiche la vue galerie
+    modalGalleryView.style.display = "block";
+
+    // Cache la vue formulaire
+    modalFormView.style.display = "none";
+
+    // Affiche la modale avec Flexbox
+    modal.style.display = "flex";
+  });
 
   console.log("Utilisateur connecté");
 
@@ -48,6 +81,40 @@ if (token) {
 } else {
   console.log("Utilisateur non connecté");
 }
+
+// Ferme la modale au clic sur la croix
+modalClose.addEventListener("click", function () {
+  // Cache la modale
+  modal.style.display = "none";
+});
+
+// Ferme la modale au clic sur le fond sombre
+modal.addEventListener("click", function (event) {
+  // Vérifie si le clic a été fait directement sur le fond de la modale
+  if (event.target === modal) {
+    // Cache la modale
+    modal.style.display = "none";
+  }
+});
+
+// Affiche le formulaire au clic sur le bouton Ajouter une photo
+addPhotoButton.addEventListener("click", function () {
+  // Cache la vue galerie
+  modalGalleryView.style.display = "none";
+
+  // Affiche la vue formulaire
+  modalFormView.style.display = "block";
+});
+
+// Affiche la galerie au clic sur la flèche de retour
+modalBack.addEventListener("click", function () {
+  // Cache la vue formulaire
+  modalFormView.style.display = "none";
+
+  // Affiche la vue galerie
+  modalGalleryView.style.display = "block";
+});
+
 
 // Stocke tous les travaux récupérés depuis l'API
 let allWorks = [];
@@ -172,6 +239,27 @@ function displayWorks(works) {
     });
 }
 
+// Affiche les projets dans la galerie de la modale
+function displayModalWorks(works) {
+  // Vide la galerie de la modale avant d'afficher les projets
+  modalGallery.innerHTML = "";
+
+  // Parcourt tous les projets
+  works.forEach(function (work) {
+    // Crée une balise image
+    const image = document.createElement("img");
+
+    // Ajoute l'image du projet
+    image.src = work.imageUrl;
+
+    // Ajoute un texte alternatif
+    image.alt = work.title;
+
+    // Ajoute l'image dans la galerie de la modale
+    modalGallery.appendChild(image);
+  });
+}
+
 // Appel à l'API pour récupérer les travaux de Sophie Bluel
 fetch("http://localhost:5678/api/works")
   .then(function (response) {
@@ -187,4 +275,7 @@ fetch("http://localhost:5678/api/works")
 
     // Affiche les projets dans la galerie
     displayWorks(allWorks);
+
+    // Affiche aussi les projets dans la galerie de la modale
+    displayModalWorks(allWorks);
   });
