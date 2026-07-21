@@ -40,6 +40,151 @@ const addPhotoButton = document.querySelector(".add-photo-button");
 // Sélectionne la flèche de retour de la modale
 const modalBack = document.querySelector(".modal-back");
 
+// Sélectionne le champ permettant de choisir une image
+const workImageInput = document.querySelector("#work-image");
+
+// Sélectionne l'image utilisée pour afficher la preview
+const imagePreview = document.querySelector("#image-preview");
+
+// Sélectionne la liste des catégories du formulaire
+const workCategorySelect = document.querySelector("#work-category");
+
+// Sélectionne le formulaire d'ajout d'un projet
+const addWorkForm = document.querySelector("#add-work-form");
+
+// Sélectionne le champ titre du projet
+const workTitleInput = document.querySelector("#work-title");
+
+// Sélectionne le bouton Valider du formulaire
+const submitWorkButton = addWorkForm.querySelector('input[type="submit"]');
+
+// Sélectionne le contenu affiché avant le choix d'une image
+const uploadPlaceholder = document.querySelector(".upload-placeholder");
+
+// Met à jour la couleur du bouton Valider selon l'état du formulaire
+function updateSubmitButton() {
+  const selectedFile = workImageInput.files[0];
+  const title = workTitleInput.value.trim();
+  const category = workCategorySelect.value;
+
+  if (selectedFile && title && category) {
+    submitWorkButton.style.backgroundColor = "#1D6154";
+  } else {
+    submitWorkButton.style.backgroundColor = "#A7A7A7";
+  }
+}
+
+// Affiche une preview lorsque l'utilisateur sélectionne une image
+workImageInput.addEventListener("change", function () {
+  // Récupère le premier fichier sélectionné
+  const selectedFile = workImageInput.files[0];
+
+  // Vérifie qu'un fichier a bien été sélectionné
+  if (selectedFile) {
+    // Crée une URL temporaire pour afficher l'image
+    imagePreview.src = URL.createObjectURL(selectedFile);
+
+    // Affiche la preview
+    imagePreview.style.display = "block";
+
+    // Cache la zone d'ajout lorsque la preview est affichée
+    uploadPlaceholder.style.display = "none";
+
+    // Vérifie si le bouton Valider peut devenir vert
+    updateSubmitButton();
+  }
+});
+
+// Vérifie le formulaire lorsque l'utilisateur écrit le titre
+workTitleInput.addEventListener("input", updateSubmitButton);
+
+// Vérifie le formulaire lorsque l'utilisateur choisit une catégorie
+workCategorySelect.addEventListener("change", updateSubmitButton);
+
+// Vérifie le formulaire avant son envoi
+addWorkForm.addEventListener("submit", function (event) {
+  // Empêche le rechargement automatique de la page
+  event.preventDefault();
+
+  // Récupère les valeurs du formulaire
+  const selectedFile = workImageInput.files[0];
+  const title = workTitleInput.value.trim();
+  const category = workCategorySelect.value;
+
+  // Vérifie que tous les champs sont remplis
+  if (!selectedFile || !title || !category) {
+    console.log("Erreur : tous les champs doivent être remplis");
+    return;
+  }
+
+  // Crée un objet FormData pour envoyer l'image et les informations du projet
+const formData = new FormData();
+
+// Ajoute l'image au formulaire
+formData.append("image", selectedFile);
+
+// Ajoute le titre au formulaire
+formData.append("title", title);
+
+// Ajoute la catégorie au formulaire
+formData.append("category", category);
+
+// Vérifie que le formulaire est correctement préparé
+console.log("Formulaire prêt à être envoyé");
+
+// Envoie le nouveau projet à l'API
+fetch("http://localhost:5678/api/works", {
+  method: "POST",
+
+  // Envoie le token pour prouver que l'utilisateur est connecté
+  headers: {
+    Authorization: `Bearer ${token}`
+  },
+
+  // Envoie les données du formulaire
+  body: formData
+})
+.then(function (response) {
+  // Vérifie que l'ajout a bien été accepté par l'API
+  if (response.ok) {
+    // Transforme la réponse en données JavaScript
+    return response.json();
+  } else {
+    console.log("Erreur lors de l'ajout du projet");
+  }
+})
+.then(function (newWork) {
+  // Affiche le nouveau projet dans la console
+  console.log("Nouveau projet :", newWork);
+
+  // Ajoute le nouveau projet au tableau des travaux
+  allWorks.push(newWork);
+
+  // Met à jour la galerie principale
+  displayWorks(allWorks);
+
+  // Met à jour la galerie de la modale
+  displayModalWorks(allWorks);
+
+  // Réinitialise le formulaire
+  addWorkForm.reset();
+
+  // Cache la preview
+  imagePreview.style.display = "none";
+
+  // Réaffiche la zone permettant de choisir une image
+  uploadPlaceholder.style.display = "flex";
+
+  // Remet le bouton Valider en gris
+  updateSubmitButton();
+
+  // Revient sur la galerie de la modale
+  modalFormView.style.display = "none";
+  modalGalleryView.style.display = "block";
+});
+
+});
+
 // Vérifie si l'utilisateur est connecté
 if (token) {
   // Remplace login par logout
@@ -166,6 +311,21 @@ fetch("http://localhost:5678/api/categories")
   .then(function (categories) {
     // Affiche les catégories dans la console
     console.log(categories);
+
+    // Ajoute les catégories dans la liste du formulaire
+    categories.forEach(function (category) {
+      // Crée une option
+      const option = document.createElement("option");
+
+      // Utilise l'id de la catégorie comme valeur
+      option.value = category.id;
+
+      // Affiche le nom de la catégorie
+      option.innerText = category.name;
+
+      // Ajoute l'option dans la liste
+      workCategorySelect.appendChild(option);
+    });
 
     // Pour chaque catégorie récupérée depuis l'API
     categories.forEach(function (category) {

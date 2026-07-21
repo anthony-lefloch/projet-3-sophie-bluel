@@ -115,13 +115,30 @@
 			</div>
 
 			<div class="modal-form-view">
-				<button class="modal-back" type="button">←</button>
+				<button class="modal-back" type="button">
+					<i class="fa-solid fa-arrow-left"></i>
+				</button>
 
 				<h2>Ajout photo</h2>
 
 				<form id="add-work-form">
-					<label for="work-image">Photo</label>
-					<input type="file" id="work-image" name="image">
+					<div class="upload-photo">
+
+						<img id="image-preview" alt="Aperçu de l'image sélectionnée">
+
+						<div class="upload-placeholder">
+							<i class="fa-regular fa-image"></i>
+
+							<label for="work-image" class="upload-button">
+								+ Ajouter photo
+							</label>
+
+							<p>jpg, png : 4mo max</p>
+						</div>
+
+						<input type="file" id="work-image" name="image" accept="image/png, image/jpeg">
+
+					</div>
 
 					<label for="work-title">Titre</label>
 					<input type="text" id="work-title" name="title">
