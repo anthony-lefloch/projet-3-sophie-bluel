@@ -246,6 +246,12 @@ function displayModalWorks(works) {
 
   // Parcourt tous les projets
   works.forEach(function (work) {
+    // Crée un conteneur pour le projet dans la modale
+    const workContainer = document.createElement("div");
+
+    // Ajoute une classe au conteneur
+    workContainer.classList.add("modal-work");
+
     // Crée une balise image
     const image = document.createElement("img");
 
@@ -255,8 +261,62 @@ function displayModalWorks(works) {
     // Ajoute un texte alternatif
     image.alt = work.title;
 
-    // Ajoute l'image dans la galerie de la modale
-    modalGallery.appendChild(image);
+    // Crée le bouton de suppression
+    const deleteButton = document.createElement("button");
+
+    // Enregistre l'id du projet sur le bouton de suppression
+    deleteButton.dataset.id = work.id;
+
+    // Ajoute une classe au bouton de suppression
+    deleteButton.classList.add("delete-work");
+
+    // Ajoute le symbole de corbeille
+    deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+
+    // Supprime le projet au clic sur la corbeille
+    deleteButton.addEventListener("click", function () {
+      // Récupère l'id du projet à supprimer
+      const workId = deleteButton.dataset.id;
+
+      // Envoie une requête DELETE à l'API
+      fetch(`http://localhost:5678/api/works/${workId}`, {
+        method: "DELETE",
+
+        // Envoie le token pour prouver que l'utilisateur est connecté
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      .then(function (response) {
+        // Vérifie que la suppression a bien été acceptée par l'API
+        if (response.ok) {
+          console.log("Projet supprimé avec succès");
+          
+          // Retire le projet supprimé du tableau allWorks
+          allWorks = allWorks.filter(function (work) {
+            return work.id !== Number(workId);
+          });
+
+          // Met à jour la galerie principale
+          displayWorks(allWorks);
+
+          // Met à jour la galerie de la modale
+          displayModalWorks(allWorks);
+        } else {
+          console.log("Erreur lors de la suppression du projet");
+        }
+      });
+    });
+
+    // Ajoute l'image dans le conteneur
+    workContainer.appendChild(image);
+
+    // Ajoute le bouton de suppression dans le conteneur
+    workContainer.appendChild(deleteButton);
+
+    // Ajoute le conteneur complet dans la galerie de la modale
+    modalGallery.appendChild(workContainer);
   });
 }
 

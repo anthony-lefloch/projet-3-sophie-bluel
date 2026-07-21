@@ -381,3 +381,25 @@ nav a {
 	font-weight: 700;
 	cursor: pointer;
 }
+
+.modal-work {
+	position: relative;
+}
+
+.delete-work {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 17px;
+	height: 17px;
+	border: none;
+	border-radius: 2px;
+	background-color: black;
+	color: white;
+	cursor: pointer;
+	font-size: 9px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+}
