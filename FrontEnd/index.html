@@ -14,6 +14,7 @@
 
 <body>
 	<div class="edit-banner">
+		<i class="fa-regular fa-pen-to-square"></i>
 		<span>Mode édition</span>
 	</div>
 
@@ -65,8 +66,11 @@
 
 		<section id="portfolio">
 			<div class="portfolio-title">
-				<h2>Mes Projets</h2>
-				<button class="edit-button">modifier</button>
+				<h2>Mes projets</h2>
+				<button class="edit-button" type="button">
+					<i class="fa-regular fa-pen-to-square"></i>
+					modifier
+				</button>
 			</div>
 
 			<div class="filters"></div>
@@ -102,7 +106,7 @@
 
 	<div class="modal">
 		<div class="modal-content">
-			<button class="modal-close" type="button">×</button>
+			<button class="modal-close" type="button" aria-label="Fermer la modale">×</button>
 
 			<div class="modal-gallery-view">
 				<h2>Galerie photo</h2>
@@ -115,7 +119,7 @@
 			</div>
 
 			<div class="modal-form-view">
-				<button class="modal-back" type="button">
+				<button class="modal-back" type="button" aria-label="Retour à la galerie">
 					<i class="fa-solid fa-arrow-left"></i>
 				</button>
 

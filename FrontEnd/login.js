@@ -12,6 +12,9 @@ loginForm.addEventListener("submit", function (event) {
 	// Empêche la page de se recharger
 	event.preventDefault();
 
+	// Efface l'ancien message d'erreur
+	loginError.innerText = "";
+
 	// Récupère la valeur de l'e-mail
 	const email = document.querySelector("#email").value;
 
